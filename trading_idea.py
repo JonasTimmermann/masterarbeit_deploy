@@ -37,7 +37,7 @@ st.set_page_config(page_title="My Webpage", page_icon=":tada:", layout="wide")
 #with st.sidebar:
 selected = option_menu(
     menu_title = "Simulationstool für den Vergleich zwischen Buy and Hold und quantitativen Handelsstrategien", #"None,
-    options= ["HOME", "Simulation - Stetig", "Simulation - Diskret"],
+    options= ["Handelsstrategien", "Simulation - Stetig", "Simulation - Diskret"],
     icons=["house", "clipboard-data","bar-chart-line"], #clipboard-data-fill, #bar-chart-line
     menu_icon="bar-chart-line",
     default_index=1,
@@ -106,6 +106,31 @@ def main():
 
     if "load_state" not in st.session_state:
         st.session_state.load_state = False
+        
+    if selected == "Handelsstrategien":
+        strategien = '<p style="font-family:sans-serif; color:black; font-size: 30px;">Die Handelsstrategien im Überblick</p>'
+        st.markdown(strategien, unsafe_allow_html=True)
+        stetig_text = '<p style="font-family:sans-serif; color:black; font-size: 20px;"><i>Handelsstrategien - stetige Simulation</i></p>'
+        st.markdown(stetig_text, unsafe_allow_html=True)
+
+        with st.expander("Signalgrenzen mit Wahrscheinlichkeiten"):
+            st.write("Diese Handelsstrategie basiert auf Wahrscheinlichkeiten, welche angeben ob zu einem Zeitpunkt eine Unter- oder Überbewertung des Aktienkurses vorliegt. Die Handelsstrategie folgt dabei einem einfachen Schema. Liegt eine Unterbewertung vor, wird, sofern man nicht bereits voll investiert ist, die Aktie gekauft. Andersherum wird die Aktie bei einer Überbewertung verkauft, sofern man investiert ist. Für die geometrische brownsche Bewegung sind die Variablen: Aktienkurs zum Startzeitpunkt, betrachteter Zeitraum, Zeitintervall, Drift und Volatilität der Aktie im Vorhinein gegeben und bekannt. Aus den genannten Variablen lassen sich daher Wahrscheinlichkeiten in Abhängigkeit des laufenden stochastischen Prozesses zu jedem Intervallzeitpunkt ableiten. Für die Bestimmung der Wahrscheinlichkeiten wird die logarithmische Normalverteilung unterstellt.")
+        with st.expander("Signalgrenzen mit Wahrscheinlichkeiten und Tagelinie als Referenzkurs"):
+            st.write("Die Variation gegenüber der gewöhnlichen Strategie mit Wahrscheinlichkeiten besteht darin, dass anstelle des Aktienkurses bzw. des Kurswertes, der aus dem simulierten Prozess hervorgeht, eine Tagelinie des Kurses als Basis für die statistische Einordnung und Bewertung verwendet wird. Wie viele Tage die Linie dabei umfasst, kann individuell gewählt werden, standardmäßig ist eine 200 - Tagelinie in der Implementierung dieser Strategie konfiguriert. Starke kurzfristige Kursausschläge sollen über diesen Ansatz abgefangen und dadurch die Anzahl an Fehlsignalen vermindert werden. Steigt der Kurs innerhalb eines kurzen Zeitraumes stark an, führt dies zu einer statistischen Überbewertung und somit zu einem vermutlich verfrühten Verkauf-Signal. Der Einsatz einer Tageslinie als den zugrundeliegenden Basiswert zu verwenden, schließt ein solches Szenario aus und eine Fokussierung auf langfristige Kursentwicklungen wird umgesetzt.")
+        with st.expander("Tagelinien am Beispiel der 38/200 Tagelinien Strategie"):
+            st.write("Die 38 Tagelinie und die 200 Tagelinie finden an der Börse zum Erzeugen von Kauf- und Verkaufssignalen Verwendung. Wird die 200 Tagelinie von der 38 Tagelinie von unten nach oben durchkreuzt, liegt ein Verkaufssignal vor. Durchkreuzt die 38 Tagelinie die 200 Tagelinie hingegen von unten nach oben, liegt analog ein Kaufsignal vor. Dieser Ansatz weist einige Parallelen zur Funktionsweise des MACD auf, wobei es sich bei den Tagelinien um einfache gleitende Durchschnitte (engl. „Simple Moving Average – SMA“), anstelle von exponentiell gleitenden Durchschnitten, handelt. Auch bei dieser Strategie wird das Ziel verfolgt, über die kurze Tagelinie frühzeitig einen Trend bzw. Kursausbruch zu erkennen und zu handeln, bevor dieser sich in der langen Tagelinie widerspiegelt. Die Strategie der 38/200-Tagelinie wird daher wie der MACD als Trendindikator klassifiziert und verwendet. Aufgrund der Tatsache, dass die Berechnung der Tagelinien auf dem arithmetischen Mittel beruht, fließen die betrachteten, vorangegangenen Kurswerte jeweils zu gleichen Teilen in das Ergebnis ein, wodurch eine gewisse Trägheit im Gegensatz zu den EMAs einer MACD-Strategie besteht.")
+        with st.expander("MACD"):
+            st.write("Der MACD (engl. Moving Average Convergence/Divergence) gehört der Gruppe der Trendindikatoren an und wurde in den 1970er Jahren von Gerald Appel eingeführt. Trendfolge-Instrumente werden eingesetzt, um Trends frühzeitig zu erkennen, bei dem Wert einzusteigen und diesen später gewinnbringend zu verkaufen, sobald der Trend gebrochen wurde. Der MACD bildet die Differenz aus dem exponentiell gleitenden Durschnitt der zurückliegenden Kurse in Bezug auf 12 Tage (sog. kurzer oder schneller Durchschnittswert) und in Bezug auf 26 Tage (sog. langer oder langsamer Durchschnittswert). Wird der Differenzwert für jeden Tag über einen Zeitraum hinweg berechnet, ergibt sich die MACD-Trendlinie. Ein Kaufsignal liegt vor, wenn der MACD bzw. dessen Trendlinie die Nulllinie von unten nach oben kreuzt. Umgekehrt liegt ein Verkauf-Signal vor, wenn die Nulllinie von oben nach unten gekreuzt wird. Der MACD berücksichtigt sowohl Trend, als auch Momentum und vereint damit zwei wichtige Größen der technischen Analyse in einem Indikator ")
+        with st.expander("Moving Average (am Beispiel der 200 Tagelinie)"):
+            st.write("Ein weit verbreitetes Mittel, um am Aktienmarkt Trends zu erkennen ist die 200-Tage-Linie. Da die Ermittlung eines Trends mithilfe dieser Methode unkompliziert ist und entsprechende Kauf- und Verkaufssignale einfach erkennbar sind, ist die 200-Tage-Linie nicht nur für institutionellen Anleger, sondern auch für Privatanleger ein interessantes Hilfsmittel bei der Chartanalyse. Die 200-Tage-Linie gibt den gleitenden Durchschnitt (engl. „Moving Average“) der Kurse der letzten 200 Tage an. Insbesondere kurzfristige Kursschwankungen werden hierbei geglättet, wodurch ein mittel- bzw. langfristiger Trend des Aktienkurses sichtbar wird. Die Linie läuft damit den Kursen hinterher und gehört daher zur Gruppe der trendfolgenden Indikatoren.")
+        st.markdown("")
+        diskret_text = '<p style="font-family:sans-serif; color:black; font-size: 20px;"><i>Handelsstrategien - diskrete Simulation</i></p>'
+        st.markdown(diskret_text, unsafe_allow_html=True)
+        
+        with st.expander("Aufeinanderfolgende Aufwaerts- und Abwaertsbewegungen"):
+            st.write("Im Gegensatz zur stetigen Simulation werden im Rahmen der diskreten Simulationen die Strategien nicht nur anhand von jeweils 100 Simulationsläufen untersucht, sondern angesichts aller potenziellen Kursverläufe des betrachteten Zeitraums. Aufgrund der Rechenleistung, als limitierender Faktor, wird ein Zeitraum von 20 Handelstagen bzw. Iterationen veranschlagt.  Der Vergleich zwischen Buy and Hold und den Varianten der Handelsstrategie umfasst dadurch jeweils die Ergebnisse aus 1.048.576 (d.h. 2^20) simulierten Kursverläufen. Infolge der geringen Anzahl an Handelstagen innerhalb eines Simulationslaufs, ergibt es Sinn ausschließlich eine Strategie auf Grundlage von aufeinanderfolgenden Aufwärts- und Abwärtsbewegungen zu untersuchen. Damit wird das Konzept eines Trendindikators aufgegriffen. Bei einer gewissen Anzahl an aufeinanderfolgenden Aufwärtsbewegungen wird die Aktie gekauft und es wird davon ausgegangen, dass ein Trend vorliegt bzw. die Kursentwicklung bestehen bleibt. Analog dazu verhält es sich mit aufeinanderfolgenden Abwärtsbewegungen. Als Signalgrenzen bei dieser Strategie dienen die Anzahl an Bewegungen, die einen Kauf oder Verkauf auslösen. ")
+        #st.write("[Mehr zur Generierung echter Zufallszahlen (Quantenvakuum-Fluktuation) >](https://qrng.anu.edu.au/)")
+
 
 
 
@@ -114,12 +139,6 @@ def main():
         diskret = '<p style="font-family:sans-serif; color:black; font-size: 30px;"><i>Simulation - mit nicht abzählbaren Kursverläufen</i></p>'
         st.markdown(diskret, unsafe_allow_html=True)
         #st.write("[Mehr zur Generierung echter Zufallszahlen (Quantenvakuum-Fluktuation) >](https://qrng.anu.edu.au/)")
-
-        #st.text_input('Sigma: ')
-        #st.text_input('Mu: ')
-        #st.selectbox('Zufallszahlen: ', ["Echte ANU","Pseudo","Pseudo-System"])
-
-        # Stetig nicht abzählbar - Trading vs Buy and Hold 
         
         with st.expander("Simulationseinstellungen"):
             left, right = st.columns(2)
@@ -132,7 +151,7 @@ def main():
             with right:
                 #st.text_input('Mu: ')
                 handelstage = st.number_input('Handelstage pro Jahr (z.B. 52 = Wochenweise, 260 = Tageweise...): ', 0, 260, value=52) 
-                price = st.number_input('Aktienkurs in € (zu Beginn)', 0, 1000, value= 100)
+                price = st.number_input('Aktienkurs in € (Startkapital)', 0, 1000, value= 100)
                 my = st.number_input('Drift/Mu µ (in %): ', 0.0, 100.0, value= 8.0) / 100.0
                 cash_zins = st.number_input('Cash-Verzinsung beim Trading (wenn nicht investiert, in %): ', 0.0, 10.0, value= 0.0) / (handelstage*100.0)
             
@@ -401,26 +420,11 @@ def main():
                             if number > 0:
                                 process_vorfeld[number] = process_vorfeld[number-1] * m.exp((my - (sigma**2)/2) * t + sigma * m.sqrt(t) * norm.ppf(randomNum_tagelinien[number]))
 
-                        #if i == 1:
-                        #    print(process_vorfeld)
-                        #    print("###############")
-                        #process_vorfeld = process_vorfeld - (process_vorfeld[tagelinien_vorfeld-1] - price)
+                      
 
                         process_vorfeld = [x - (process_vorfeld[tagelinien_vorfeld-1] - price) for x in process_vorfeld]
 
-                        #if i == 1:
-                        #    print(process_vorfeld)
-                        #    print("###################")
-
-
-
-
-
-
-
-
-
-
+                        
 
 
 
@@ -640,11 +644,6 @@ def main():
                                     tageschnitte_xx[rand] = summe_xx/signalgrenze_klein
 
                                   
-                                    #if i == 99 and rand ==1:
-                                    #    print("+++++++++++")
-                                    #    print(process_array)
-                                    #    print(tageschnitte_xx[rand])
-                                    #    print("+++++++++++")
 
 
                                 #summe_zz = 0 #Tagelinie für Kredit Szenario 
@@ -877,19 +876,7 @@ def main():
                                         cash[rand] = cash[rand-1]
                                         kredit_cash[rand] = kredit_cash[rand-1]
 
-                                    # Cash ohne Transaktionskosten
-                                    #if (signal[rand] == "Verkauf" and possible[rand] == "möglich") or (rand == handelstage_gesamt-1 and kredit_aktiv):
-                                    #    cash[rand] = process[rand] * position[rand-1]
-                                    #    if kredit_aktiv:
-                                    #        kredit_cash[rand] = process[rand] * kredit_position[rand-1]
-                                    #        kredit_aktiv = False
-                                    #        kredit_gewinn[rand] =  kredit_cash[rand] - kreditlinie[rand] 
-                                    #        kredit_gewinn_all += kredit_gewinn[rand]
-                                    #elif signal[rand] == "Kauf" and possible[rand] == "möglich":
-                                    #    cash[rand] = 0
-                                    #else: 
-                                    #    cash[rand] = cash[rand-1]
-                                    #    kredit_cash[rand] = kredit_cash[rand-1]
+                               
                                 
 
     # 1. Möglichkeit + Reinvestieren des Kreditgewinns
@@ -1155,7 +1142,7 @@ def main():
             st.session_state.betragTS = betragTS
             st.session_state.betrag_kredit_gewinn_all = betrag_kredit_gewinn_all
             #st.session_state.csv_klassisch = csv_klassisch
-            st.session_state.df3 = df_array #################################################
+            st.session_state.df3 = df_array ##
             st.session_state.kurs_trading_chart = kurs_trading_chart
             st.session_state.ausgewaehlte_strategie = ausgewaehlte_strategie
             st.session_state.transaktionskosten_array = transaktionskosten_array
@@ -1232,7 +1219,7 @@ def main():
         st.markdown(diskret, unsafe_allow_html=True)
 
         sigma_diskret = st.number_input('Volatilität/Sigma σ: ', 0.0, 1.0, value=0.2)
-        mu_diskret = st.number_input('Müh σ: ', 0.0, 1.0, value=0.08)
+        mu_diskret = st.number_input('Drift/Mu µ: ', 0.0, 1.0, value=0.08)
         left_input, right_input = st.columns(2)
         with left_input:
             anzahl_basis = st.number_input('Basis T (Anzahl Bewegungen, 4=Quartalsweise, 12=Monatsweise...)', 1, 20, value=12)
@@ -1505,30 +1492,10 @@ def ergebnis_darstellung(prozess_daten, grunddaten, ergebnis_array, ergebnis_arr
 #[3][0-1] Mittelwert Schlusskurse
 #[3][2-3] Standardabweichung Schlusskurse
 
-### check ###
-
-# Vorschläge Performance Messung:
-# Grunddaten nochmal auflisten, mu, vola und exp(St)...
-# Nur für B&H Wahrscheinlichkeit S>St siehe Trading_Idea Excel
-# Median und Durschnitts Kurs --> Kurse addieren und durch Anzahl Sims teilen
-# durchschnittliche Gesamtrendite pro Simulation, 2x2 --> 20% vs 18% ((S(T)-S(0))/S(0) pro Sim. und dann den Durchschnitt oder umgekehrt)
-# durchschnittliche Jahresrendite pro Simulation, 2x2 -||-
-
-# Distance to B&H --> Wie groß ist der Kursunterschied am Ende einer jeden Sim. --> viele kleine Diffs oder wenige Große? --> evtl. als Balkendiagramm abbilden, z.B. >20, 10<20, <10...
-# Vergleich der Max und Min werte, sprich höchste und niedrigster Kurs jeweils von allen Sim's
-
-# Thema Statistische Signifikanz --> bezogen auf Anzahl an Simulationen
-# Calmar Ratio --> Bei Trading dann nur die Tage in denen man investiert ist einbeziehen
-# Maybe sharpe Ratio
-
-
 
 
             #End-Gesamtergebnisse als Tabelle  
           
-            
-    
-
 
             daten_häufigkeit = np.array([[ergebnis_array[0][0], ergebnis_array[0][1]], [ergebnis_array[0][2], ergebnis_array[0][3]], [0, ergebnis_array[0][4]]]) #Häufigkeit
             index_values = ['Vergleich: jeweils höherer Schlusskurs (Häufigkeit)', 'Vergleich: jeweils höherer Schlusskurs (in %)', 'Performance (Trading in %)']
@@ -1682,15 +1649,13 @@ def ergebnis_darstellung(prozess_daten, grunddaten, ergebnis_array, ergebnis_arr
             with st.expander("Ergebnisse als Tabelle"):
                 #Auflistung der Gesamtergebnisse
                 #                
-                st.markdown("Statistik-Kennzahlen in Bezug auf den Prozess")
-                df_prozess = pd.DataFrame(data = prozess_daten, 
-                    index = ('ln(S0) + (µ + sigma²/2)*T', 'sigma * Wurzel(T)', "Prob(ST <= 149€)", "Prob(ST > 149€)", "Median", "Prob(S > S(T)) bei Buy and Hold", "Werte"))
-                df_prozess = np.transpose(df_prozess)
-                df_prozess = df_prozess.set_index('Werte')
-                st.table(df_prozess)
-                #st.table(df_prozess.style.format(subset=['Werte'], formatter="{:.2f}"))
-
-
+                #st.markdown("Statistik-Kennzahlen in Bezug auf den Prozess")
+                #df_prozess = pd.DataFrame(data = prozess_daten, 
+                #    index = ('ln(S0) + (µ + sigma²/2)*T', 'sigma * Wurzel(T)', "Prob(ST <= 149€)", "Prob(ST > 149€)", "Median", "Prob(S > S(T)) bei Buy and Hold", "Werte"))
+                #df_prozess = np.transpose(df_prozess)
+                #df_prozess = df_prozess.set_index('Werte')
+                #st.table(df_prozess)
+                 #st.table(df_prozess.style.format(subset=['Werte'], formatter="{:.2f}"))
 
                 links_H, rechts_B = st.columns(2)
                 with links_H:
