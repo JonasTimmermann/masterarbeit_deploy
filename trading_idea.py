@@ -1,5 +1,5 @@
 # coding=utf-8
-from email import header
+#from email import header
 from pickle import FALSE
 from random import seed
 from random import random
@@ -9,22 +9,22 @@ from scipy.stats import norm
 from random import randrange
 import quantumrandom 
 import numpy as np
-from bitarray import bitarray
+#from bitarray import bitarray
 from bitarray.util import int2ba
 import streamlit as st
 import pandas as pd
-import altair as alt
-import base64
-import xlsxwriter
+#import altair as alt
+#import base64
+#import xlsxwriter
 from io import BytesIO
 from streamlit_option_menu import option_menu
 import plotly.figure_factory as ff
-import plotly.express as px
-import plotly.graph_objects as go
+#import plotly.express as px
+#import plotly.graph_objects as go
 from scipy.special import erfinv
-import requests
-import yfinance as yf
-import pandas_datareader as web
+#import requests
+#import yfinance as yf
+#import pandas_datareader as web
 from datetime import datetime
 #import lxml
 #import plotly.figure_factory as ff
