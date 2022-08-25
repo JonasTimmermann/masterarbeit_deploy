@@ -1817,6 +1817,7 @@ def ergebnis_darstellung(prozess_daten, grunddaten, ergebnis_array, ergebnis_arr
            
 
             with st.expander("Downloads "):
+                st.write("Das Ergebnis des letzten Simulationslaufes als Beispiel für die CSV-Dateien")
                 if "XX/YY Tagelinie" in ausgewaehlte_strategie:
                     if kredit_true:
                         tageschnitte = np.zeros(shape=(int(len(tageschnitte_xx)),4))
