@@ -4,13 +4,13 @@ from pickle import FALSE
 from random import seed
 from random import random
 import math as m
-from time import process_time
+#from time import process_time #
 from scipy.stats import norm
 from random import randrange
 import quantumrandom 
 import numpy as np
 #from bitarray import bitarray
-from bitarray.util import int2ba
+#from bitarray.util import int2ba #
 import streamlit as st
 import pandas as pd
 #import altair as alt
@@ -28,12 +28,6 @@ from scipy.special import erfinv
 from datetime import datetime
 #import lxml
 #import plotly.figure_factory as ff
-
-
-
-# TOdo
-# Transak. bei Ergebnis tabelle einbinden
-# transakt. bei kredit fall einbinden und als Übersicht in den der gesamtübersicht aller Sims
 
 
 
